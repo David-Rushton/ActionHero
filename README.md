@@ -3,16 +3,59 @@
 Get things done.  Action hero style.
 
 
-## Thoughts
+## Thoughts on Commands
 
-`ControllerViewHost`
-    -> `InputDispatchService`
-    -> `ViewRenderingService`
+- Commands are assigned to Controllers
+- HomeController catches commands not handled by active controller
+- Controller base provides common commands like
+    - close 
+    - help
+    - exit?
+- Commands can be done and undone
 
-Controllers register with the `cvh`.  
+Do we want HomeController?  I.e. is the HomeView always the default?
 
-`cvh` -> provides `AppController` with first chance to process input.  Then active controller.
 
-Controllers update views and models.  Controllers mark views as dirty when a refresh is required.
 
-`vds` refreshes the screen whenever a view is dirty or the console has been resized.
+
+```cs
+Command.Build((host, app) => 
+{
+    host.Controllers.Open(Controllers.TaskList);
+    host.RegisterController(Controllers.TaskList);
+})
+
+
+Command.Build((host, app) => 
+{
+    host.RegisterController(host.GetRequiredService<SomeController>);
+})
+
+
+
+XController : Controller
+{
+    void override OnInput(Key key)
+    {
+        if (key == 'd')
+        {
+            Presenters.Open(Presenter.DetailPresenter);
+            _presenters.Open(Presenter.DetailPresenter);
+
+            Host.Presenters.Open(Presenter.DetailPresenter);
+            _host.Presenters.Open(Presenter.DetailPresenter);
+            #
+
+            Host.OpenPresenter<AppPresenter>();
+
+
+            void OpenPresenter<T> where T : IPresenter
+            {
+                var p = _serviceProvider.GetRequiredService<T>();
+                /* ... */
+            }
+        }
+    }
+}
+```
+ 

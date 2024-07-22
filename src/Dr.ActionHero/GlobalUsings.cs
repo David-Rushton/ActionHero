@@ -1,8 +1,14 @@
-global using Dr.ActionHero.Commands;
-global using Dr.ActionHero.Controllers;
+global using Dr.ActionHero.Abstractions;
+global using Dr.ActionHero.Extensions;
+global using Dr.ActionHero.Logging;
 global using Dr.ActionHero.Model;
+global using Dr.ActionHero.Presenters;
+global using Dr.ActionHero.Repositories;
 global using Dr.ActionHero.Services;
+global using Dr.ActionHero.Services.Helpers;
 global using Dr.ActionHero.Views;
 global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.Logging;
+global using System.Collections.Concurrent;
 global using Spectre.Console;
 global using Spectre.Console.Cli;
