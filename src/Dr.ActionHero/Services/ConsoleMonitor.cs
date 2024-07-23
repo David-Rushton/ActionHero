@@ -1,4 +1,4 @@
-namespace Dr.ActionHero.Services.Helpers;
+namespace Dr.ActionHero.Services;
 
 public class ConsoleMonitor
 {

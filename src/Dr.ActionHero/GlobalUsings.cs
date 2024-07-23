@@ -5,7 +5,6 @@ global using Dr.ActionHero.Model;
 global using Dr.ActionHero.Presenters;
 global using Dr.ActionHero.Repositories;
 global using Dr.ActionHero.Services;
-global using Dr.ActionHero.Services.Helpers;
 global using Dr.ActionHero.Views;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;

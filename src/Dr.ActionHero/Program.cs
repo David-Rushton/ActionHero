@@ -1,18 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-Host.CreateDefaultBuilder(args)
+await Host.CreateDefaultBuilder(args)
     .AddInMemoryLogger(config => { })
     .ConfigureServices(services =>
     {
         services
             .AddSingleton<Log>()
-            .AddSingleton<ConsoleMonitor>()
-            .AddSingleton<PresenterManager>()
+            .AddSingleton<PresenterService>()
             .AddSingleton<HomePresenter>()
             .AddSingleton<HelpPresenter>()
             .AddSingleton<HomeView>()
             .AddSingleton<HelpView>()
+            .AddTransient<ConsoleMonitor>()
+            .AddTransient<PresenterMonitor>()
             .AddHostedService<ActionHeroHost>();
     })
+    .UseConsoleLifetime()
     .Build()
-    .Run();
+    .RunAsync();

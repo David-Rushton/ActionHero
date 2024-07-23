@@ -23,8 +23,11 @@ public class HomeView : IView
         _contentTop++;
     }
 
-    public void RenderPresenter(IEnumerable<string> breadcrumbViews, IEnumerable<IRenderable> content)
+    public void RenderPresenter(IEnumerable<string> breadcrumbViews, IView? activeView)
     {
+        var content = activeView?.GetContent()
+            ?? Array.Empty<IRenderable>();
+
         var height = Console.WindowHeight - _contentTop - 1;
         if (height > 5)
         {

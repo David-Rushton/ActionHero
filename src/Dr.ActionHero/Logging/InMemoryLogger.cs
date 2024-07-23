@@ -23,6 +23,8 @@ public class InMemoryLogger(
         if (!IsEnabled(logLevel))
             return;
 
+        // AnsiConsole.WriteLine($"{logLevel} | {formatter(state, exception)}");
+
         log.Add(new(DateTime.UtcNow, logLevel, formatter(state, exception)));
     }
 }

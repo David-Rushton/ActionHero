@@ -2,17 +2,32 @@
 
 namespace Dr.ActionHero.Presenters;
 
-public class HomePresenter(HomeView view) : IPresenter
+public class HomePresenter(
+    ILogger<HomePresenter> logger,
+    HomeView view,
+    ConsoleMonitor consoleMonitor,
+    PresenterMonitor presenterMonitor) : IPresenter
 {
     public IView View => view;
 
-    public void RenderTitle() =>
-        view.RenderTitle();
 
-    public void RenderPresenter(IPresenter activePresenter, IEnumerable<IPresenter> openPresenters) =>
-        view.RenderPresenter(
-            breadcrumbViews: openPresenters.Select(p => p.View.Name),
-            content: activePresenter.View.GetContent());
+
+    public void Render(IPresenter? activePresenter, IEnumerable<IPresenter> openPresenters)
+    {
+        var consoleHasResized = consoleMonitor.HasResized();
+        var isDirty = presenterMonitor.IsDirty(openPresenters);
+
+        if (consoleHasResized)
+            view.RenderTitle();
+
+        if (consoleHasResized || isDirty)
+        {
+            logger.LogInformation($"Rendering b: {openPresenters.Count()}");
+            view.RenderPresenter(
+                breadcrumbViews: openPresenters.Select(p => p.View.Name),
+                activeView: activePresenter?.View);
+        }
+    }
 
     public bool TryProcessInput(ActionHeroHost host, ConsoleKeyInfo keyInfo)
     {
