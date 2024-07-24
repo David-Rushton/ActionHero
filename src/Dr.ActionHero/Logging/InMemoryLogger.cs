@@ -3,7 +3,7 @@ namespace Dr.ActionHero.Logging;
 public class InMemoryLogger(
 #pragma warning disable CS9113 // Parameter is unread.
     string name,
-    Log log,
+    LogRepository log,
     Func<InMemoryLoggerConfiguration> getConfiguration) : ILogger
 #pragma warning restore CS9113 // Parameter is unread.
 {
@@ -22,8 +22,6 @@ public class InMemoryLogger(
     {
         if (!IsEnabled(logLevel))
             return;
-
-        // AnsiConsole.WriteLine($"{logLevel} | {formatter(state, exception)}");
 
         log.Add(new(DateTime.UtcNow, logLevel, formatter(state, exception)));
     }

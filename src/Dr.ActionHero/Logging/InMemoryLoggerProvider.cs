@@ -4,12 +4,12 @@ namespace Dr.ActionHero.Logging;
 
 public class InMemoryLoggerProvider : ILoggerProvider
 {
-    private readonly Log _log;
+    private readonly LogRepository _log;
     private readonly IDisposable? _onChangeToken;
     private readonly ConcurrentDictionary<string, InMemoryLogger> _loggers = new(StringComparer.Ordinal);
     private InMemoryLoggerConfiguration _configuration;
 
-    public InMemoryLoggerProvider(Log log, IOptionsMonitor<InMemoryLoggerConfiguration> configuration)
+    public InMemoryLoggerProvider(LogRepository log, IOptionsMonitor<InMemoryLoggerConfiguration> configuration)
     {
         _configuration = configuration.CurrentValue;
         _onChangeToken = configuration.OnChange(updatedConfig => _configuration = updatedConfig);

@@ -39,6 +39,7 @@ public class ActionHeroHost(
                         this,
                         Console.ReadKey(intercept: true));
 
+                presenterService.OnTick();
                 presenterService.Render();
 
                 // TODO: This should probably go.

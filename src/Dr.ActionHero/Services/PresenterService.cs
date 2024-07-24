@@ -11,7 +11,7 @@ public class PresenterService(
     HomePresenter homePresenter) : IInputReceiver
 
 {
-    public Queue<IPresenter> OpenPresenters { get; } = new();
+    public Stack<IPresenter> OpenPresenters { get; } = new();
 
     public void OpenPresenter<T>() where T : IPresenter
     {
@@ -20,18 +20,24 @@ public class PresenterService(
 
         logger.LogInformation("Opening presenter: {presenterName}.", instance.View.Name);
 
-        OpenPresenters.Enqueue(instance);
+        OpenPresenters.Push(instance);
+    }
+
+    public void OnTick()
+    {
+        if (OpenPresenters.FirstOrDefault() is ITickReceiver tickReceiver)
+            tickReceiver.OnTick();
     }
 
     public void Render()
     {
-        var activePresenter = OpenPresenters.LastOrDefault();
-        homePresenter.Render(activePresenter, OpenPresenters);
+        var activePresenter = OpenPresenters.FirstOrDefault();
+        homePresenter.Render(activePresenter, OpenPresenters.Reverse());
     }
 
     public void CloseActivePresenter()
     {
-        OpenPresenters.TryDequeue(out _);
+        OpenPresenters.TryPop(out _);
 
         if (OpenPresenters.Any())
             OpenPresenters.Peek().View.IsDirty = true;
@@ -45,12 +51,12 @@ public class PresenterService(
 
         return false;
 
-        IEnumerable<IPresenter> GetPresenters()
+        IEnumerable<IInputReceiver> GetPresenters()
         {
             yield return homePresenter;
 
-            if (OpenPresenters.Any())
-                yield return OpenPresenters.Last();
+            if (OpenPresenters.FirstOrDefault() is IInputReceiver inputReceiver)
+                yield return inputReceiver;
         }
     }
 }

@@ -5,13 +5,16 @@ await Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services
-            .AddSingleton<Log>()
+            .AddSingleton<LogRepository>()
             .AddSingleton<PresenterService>()
             .AddSingleton<HomePresenter>()
             .AddSingleton<HelpPresenter>()
+            .AddSingleton<LogPresenter>()
             .AddSingleton<HomeView>()
             .AddSingleton<HelpView>()
+            .AddSingleton<LogView>()
             .AddTransient<ConsoleMonitor>()
+            .AddTransient<LogMonitor>()
             .AddTransient<PresenterMonitor>()
             .AddHostedService<ActionHeroHost>();
     })

@@ -22,10 +22,11 @@ public class HomePresenter(
 
         if (consoleHasResized || isDirty)
         {
-            logger.LogInformation($"Rendering b: {openPresenters.Count()}");
             view.RenderPresenter(
                 breadcrumbViews: openPresenters.Select(p => p.View.Name),
                 activeView: activePresenter?.View);
+
+            view.IsDirty = false;
         }
     }
 
@@ -46,6 +47,12 @@ public class HomePresenter(
         if (keyInfo.KeyChar == '?')
         {
             host.OpenPresenter<HelpPresenter>();
+            return true;
+        }
+
+        if (keyInfo.KeyChar == 'l')
+        {
+            host.OpenPresenter<LogPresenter>();
             return true;
         }
 
